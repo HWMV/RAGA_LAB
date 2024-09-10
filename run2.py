@@ -62,6 +62,6 @@ crew = Crew(
 
 result = crew.kickoff(
     inputs=dict(
-        company="microsoft",
+        company="Tesla",
     ),
 )

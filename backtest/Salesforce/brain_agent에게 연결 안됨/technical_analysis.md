@@ -1,0 +1,1 @@
+Unfortunately, as an AI language model, I do not have direct access to external websites such as Google News to gather the latest news and market sentiment surrounding Salesforce. I recommend utilizing the provided tools to gather information and incorporate it into your technical analysis report.

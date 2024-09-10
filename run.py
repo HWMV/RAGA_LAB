@@ -13,22 +13,12 @@ from stock.agents import Agents
 from stock.tasks import *
 
 from brain.brain_agents import *
-from brain.brain_tasks import *
+from brain.brain_tasks import Brain_tasks
 
 load_dotenv()
 
 os.environ["OPENAI_MODEL_NAME"] = "gpt-3.5-turbo-0125"
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
-
-from crewai import Crew
-from crewai.process import Process
-from langchain_openai import ChatOpenAI
-
-from stock.agents import *
-from stock.tasks import *
-
-from brain.brain_agents import *
-from brain.brain_tasks import Brain_tasks
 
 # 백 테스트 시 기록을 위한 필요 태그 추출 함수
 def extract_price_predictions(result):
@@ -42,7 +32,7 @@ def extract_price_predictions(result):
 
 def main():
     # Second_crew에서 ticker를 입력으로 못 받아서 수정 (직접 명시)
-    company = "microsoft"
+    company = "Nvidia"
     # ticker = "CRM"  # 회사의 실제 ticker를 사용
 
     # 왜 따로 정의를 다시 해야 되는거지?? 정의 안하고 Agents 바로 객체를 사용하면 self 인자 에러 발생. 정적 메서드 vs 인스턴스 메서드 차이?
@@ -65,8 +55,10 @@ def main():
     technical_task = tasks.technical_analysis(technical_analyst)
     financial_task = tasks.financial_analysis(financial_analyst)
 
-    # brainModule apply, hedge_fund_manager 대신 뇌모듈
-    # 을 추가 (recommendation task를 수행)
+    # left_brain_task = brain_tasks.left_brain_task(left_brain)
+    # right_brain_task = brain_tasks.right_brain_task(right_brain)
+
+    # brainModule apply, hedge_fund_manager 대신 뇌모듈을 추가 (recommendation task를 수행)
     left_brain_task = brain_tasks.left_brain_task(
         left_brain, [
             technical_task,
@@ -82,14 +74,13 @@ def main():
 
     brain_agent_task = brain_tasks.brain_agent_task(
         brain_agent, [
+            research_task,
+            technical_task,
+            financial_task,
             left_brain_task,
             right_brain_task,
         ]
     )
-
-    # left_brain_task = brain_tasks.left_brain_task(left_brain)
-    # right_brain_task = brain_tasks.right_brain_task(right_brain)
-    # brain_agent_task = brain_tasks.brain_agent_task(brain_agent)
 
     first_crew = Crew(
         agents=[researcher, 
@@ -108,8 +99,8 @@ def main():
                 brain_agent_task,
                 ],
 
-        process=Process.sequential, # hierarchical,
-        # manager_llm=ChatOpenAI(model="gpt-3.5-turbo-0125"), # "gpt-4o"),
+        process=Process.hierarchical, # sequential, # hierarchical,
+        manager_llm=ChatOpenAI(model="gpt-3.5-turbo-0125"), # "gpt-4o"),
         memory=True,
     )
 

@@ -5,12 +5,12 @@ from datetime import datetime, timedelta
 from gnews import GNews
 
 class Tools:
-    BASE_DATE = "2024-01-01"
+    BASE_DATE = "2024-01-31"
 
     @tool("Stock price history")
     def stock_price(ticker):
         """
-        Get stock price data for the last month before 2024-01-01 as CSV.
+        Get stock price data for the last month before 2024-01-31 as CSV.
         The input should be a ticker (e.g., AAPL, NET, TSLA).
         """
         stock = yf.Ticker(ticker)
@@ -21,11 +21,11 @@ class Tools:
     @tool("Stock news URLs")
     def stock_news(ticker):
         """
-        Get URLs of news articles related to a stock from 2023-12-01 to 2024-01-01.
+        Get URLs of news articles related to a stock from 2023-12-01 to 2024-01-31.
         The input to this tool should be a ticker, for example AAPL, NET
         """
         start_date = datetime(2023, 12, 1)
-        end_date = datetime(2024, 1, 1)
+        end_date = datetime(2024, 1, 31)
 
         # 나중에 max_result 늘려야 함    
         google_news = GNews(language='en', country='US', start_date=start_date, end_date=end_date, max_results=10)
@@ -35,7 +35,7 @@ class Tools:
     @tool("Company's income statement")
     def income_stmt(ticker):
         """
-        Get the income statement of a stock as of 2024-01-01 as CSV.
+        Get the income statement of a stock as of 2024-01-31 as CSV.
         The input should be a ticker (e.g., AAPL, NET).
         """
         stock = yf.Ticker(ticker)
@@ -46,7 +46,7 @@ class Tools:
     @tool("Balance sheet")
     def balance_sheet(ticker):
         """
-        Get the balance sheet of a stock as of 2024-01-01 as CSV.
+        Get the balance sheet of a stock as of 2024-01-31 as CSV.
         The input should be a ticker (e.g., AAPL, NET).
         """
         stock = yf.Ticker(ticker)
@@ -57,7 +57,7 @@ class Tools:
     @tool("Get insider transactions")
     def insider_transactions(ticker):
         """
-        Get insider transactions of a stock for the last month before 2024-01-01 as CSV.
+        Get insider transactions of a stock for the last month before 2024-01-31 as CSV.
         The input should be a ticker (e.g., AAPL, NET).
         """
         try:
